@@ -16,12 +16,12 @@ const hasProjects = siteConfig.projects && siteConfig.projects.items && siteConf
               class="w-[75px] h-[5px] mt-2 rounded-full"
               style={`background-color: ${siteConfig.accentColor}`}
             />
+            <p class="mt-6 text-base sm:text-lg text-gray-600 leading-relaxed">
+              {siteConfig.projects.intro}
+            </p>
           </div>
 
           <div class="lg:col-span-8">
-            <p class="text-lg text-gray-700 leading-relaxed mb-12">
-              {siteConfig.projects.intro}
-            </p>
             <div class="space-y-8">
               {siteConfig.projects.items.map((project) => {
                 const Component = project.link ? "a" : "div";
