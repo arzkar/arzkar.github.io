@@ -20,18 +20,7 @@ const hasExperience = siteConfig.experience && siteConfig.experience.length > 0;
           About
         </a>
       </li>
-      {
-        hasProjects && (
-          <li>
-            <a
-              href="#projects"
-              class="text-gray-700 hover:text-black transition-colors font-medium"
-            >
-              Open-source & Tooling
-            </a>
-          </li>
-        )
-      }
+     
       {
         hasCaseStudies && (
           <li>
@@ -52,6 +41,18 @@ const hasExperience = siteConfig.experience && siteConfig.experience.length > 0;
               class="text-gray-700 hover:text-black transition-colors font-medium"
             >
               Experience
+            </a>
+          </li>
+        )
+      }
+       {
+        hasProjects && (
+          <li>
+            <a
+              href="#projects"
+              class="text-gray-700 hover:text-black transition-colors font-medium"
+            >
+              Open-source & Tooling
             </a>
           </li>
         )

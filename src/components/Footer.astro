@@ -129,16 +129,6 @@ const hasExperience = siteConfig.experience && siteConfig.experience.length > 0;
             >About</a
           >
           {
-            hasProjects && (
-              <a
-                href="#projects"
-                class="text-sm text-gray-600 hover:text-gray-800 transition-colors"
-              >
-                Open-source & Tooling
-              </a>
-            )
-          }
-          {
             hasCaseStudies && (
               <a
                 href="#case-studies"
@@ -155,6 +145,16 @@ const hasExperience = siteConfig.experience && siteConfig.experience.length > 0;
                 class="text-sm text-gray-600 hover:text-gray-800 transition-colors"
               >
                 Experience
+              </a>
+            )
+          }
+          {
+            hasProjects && (
+              <a
+                href="#projects"
+                class="text-sm text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                Open-source & Tooling
               </a>
             )
           }
