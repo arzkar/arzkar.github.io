@@ -1,0 +1,139 @@
+---
+import { siteConfig } from "../config";
+const hasCaseStudies = siteConfig.caseStudies && siteConfig.caseStudies.length > 0;
+---
+
+{
+  hasCaseStudies && (
+    <section id="case-studies" class="p-8 sm:p-12 md:p-16 lg:p-24">
+      <div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+          <div class="lg:col-span-4">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl xl:text-7xl font-bold text-gray-900">
+              Work
+            </h2>
+            <div
+              class="w-[75px] h-[5px] mt-2 rounded-full"
+              style={`background-color: ${siteConfig.accentColor}`}
+            />
+            <p class="mt-6 text-base sm:text-lg text-gray-600 leading-relaxed">
+              Production systems I've built and shipped. Architecture, decisions, and outcomes.
+            </p>
+          </div>
+
+          <div class="lg:col-span-8">
+            <div class="relative">
+              <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-200 -translate-x-[29px] hidden lg:block" />
+              <div class="space-y-16 pl-0 lg:pl-8">
+                {siteConfig.caseStudies.map((study, index) => (
+                  <article class="relative">
+                    {/* Timeline dot */}
+                    <div
+                      class="absolute left-0 top-6 w-3 h-3 bg-white border-2 rounded-full -translate-x-[38px] z-20 hidden lg:block"
+                      style={`border-color: ${siteConfig.accentColor}; background-color: ${siteConfig.accentColor}`}
+                    />
+
+                  <div class="bg-white rounded-lg border border-gray-200 p-6 sm:p-8 md:p-10">
+                    {/* Header */}
+                    <div class="mb-8">
+                      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+                        <div>
+                          <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                            {study.title}
+                          </h3>
+                          {study.companyUrl ? (
+                            <a
+                              href={study.companyUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class="text-lg sm:text-xl hover:underline transition-colors"
+                              style={`color: ${siteConfig.accentColor}`}
+                            >
+                              {study.company}
+                            </a>
+                          ) : (
+                            <p
+                              class="text-lg sm:text-xl"
+                              style={`color: ${siteConfig.accentColor}`}
+                            >
+                              {study.company}
+                            </p>
+                          )}
+                        </div>
+                        <span class="text-sm text-gray-500 font-mono">
+                          {study.dateRange}
+                        </span>
+                      </div>
+
+                      {study.isPrivate && (
+                        <p class="text-sm text-gray-500 italic">
+                          Codebase is private due to client confidentiality. Architecture and decisions shown reflect the production system.
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Problem */}
+                    <div class="mb-8">
+                      <h4 class="text-lg font-semibold text-gray-900 mb-3">Problem</h4>
+                      <div class="text-base text-gray-700 leading-relaxed space-y-4">
+                        {study.problem.split("\n\n").map((paragraph) => (
+                          <p>{paragraph}</p>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Architecture */}
+                    <div class="mb-8">
+                      <h4 class="text-lg font-semibold text-gray-900 mb-3">Architecture</h4>
+                      <div class="text-base text-gray-700 leading-relaxed space-y-4">
+                        {study.architecture.split("\n\n").map((paragraph) => (
+                          <p>{paragraph}</p>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Key Decisions */}
+                    <div class="mb-8">
+                      <h4 class="text-lg font-semibold text-gray-900 mb-3">Key Decisions</h4>
+                      <ul class="space-y-2">
+                        {study.decisions.map((decision) => (
+                          <li class="flex items-start">
+                            <span class="inline-block w-1.5 h-1.5 rounded-full bg-gray-400 mt-2 mr-3 flex-shrink-0" />
+                            <span class="text-base text-gray-700 leading-relaxed">
+                              {decision}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Outcome */}
+                    <div class="mb-6">
+                      <h4 class="text-lg font-semibold text-gray-900 mb-3">Outcome</h4>
+                      <p class="text-base text-gray-700 leading-relaxed">
+                        {study.outcome}
+                      </p>
+                    </div>
+
+                    {/* Technologies */}
+                    <div>
+                      <div class="flex flex-wrap gap-2">
+                        {study.technologies.map((tech) => (
+                          <span class="px-3 py-1 bg-gray-100 text-gray-800 rounded-md text-sm font-medium">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
