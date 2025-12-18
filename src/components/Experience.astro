@@ -1,6 +1,65 @@
 ---
 import { siteConfig } from "../config";
-const hasExperience = siteConfig.experience && siteConfig.experience.length > 0;
+
+// Calculate years of experience from date range (resume-style)
+const calculateExperienceDuration = (dateRange: string): string => {
+  const monthMap: Record<string, number> = {
+    Jan: 1,
+    Feb: 2,
+    Mar: 3,
+    Apr: 4,
+    May: 5,
+    Jun: 6,
+    Jul: 7,
+    Aug: 8,
+    Sep: 9,
+    Oct: 10,
+    Nov: 11,
+    Dec: 12
+  };
+
+  const parts = dateRange.split(" - ");
+  if (parts.length !== 2) return "";
+
+  const startStr = parts[0].trim();
+  const endStr = parts[1].trim();
+
+  const startMatch = startStr.match(/(\w+)\s+(\d{4})/);
+  if (!startMatch) return "";
+
+  const startMonth = monthMap[startMatch[1]];
+  const startYear = parseInt(startMatch[2], 10);
+
+  let endMonth: number;
+  let endYear: number;
+
+  if (endStr.toLowerCase() === "present") {
+    const now = new Date();
+    endMonth = now.getMonth() + 1;
+    endYear = now.getFullYear();
+  } else {
+    const endMatch = endStr.match(/(\w+)\s+(\d{4})/);
+    if (!endMatch) return "";
+    endMonth = monthMap[endMatch[1]];
+    endYear = parseInt(endMatch[2], 10);
+  }
+
+  let totalMonths =
+    (endYear - startYear) * 12 + (endMonth - startMonth);
+
+  if (totalMonths <= 0) return "";
+
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
+
+  if (years === 0) return `${months} ${months === 1 ? "mo" : "mos"}`;
+  if (months === 0) return `${years} ${years === 1 ? "yr" : "yrs"}`;
+  return `${years} ${years === 1 ? "yr" : "yrs"} ${months} ${months === 1 ? "mo" : "mos"}`;
+};
+
+const hasExperience =
+  siteConfig.experience && siteConfig.experience.length > 0;
+
 ---
 
 {
@@ -35,7 +94,7 @@ const hasExperience = siteConfig.experience && siteConfig.experience.length > 0;
 
                   {/* Experience card */}
                   <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-5 md:p-6 hover:shadow-md transition-shadow duration-300">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4">
                       <div>
                         <h3 class="text-lg sm:text-xl font-semibold text-gray-900">
                           {exp.title}
@@ -59,9 +118,19 @@ const hasExperience = siteConfig.experience && siteConfig.experience.length > 0;
                           </p>
                         )}
                       </div>
-                      <span class="text-xs sm:text-sm text-gray-500 mt-2 sm:mt-0">
-                        {exp.dateRange}
-                      </span>
+                      <div class="text-right mt-2 sm:mt-0">
+                        <div class="text-xs sm:text-sm text-gray-500">
+                          {exp.dateRange}
+                        </div>
+                        {(() => {
+                          const duration = calculateExperienceDuration(exp.dateRange);
+                          return duration ? (
+                            <div class="text-xs sm:text-sm text-gray-400 mt-1">
+                              {duration}
+                            </div>
+                          ) : null;
+                        })()}
+                      </div>
                     </div>
 
                     <ul class="space-y-2">

@@ -5,7 +5,7 @@ export const personal = {
   name: "Arbaaz Laskar",
   title: "Senior Software Developer",
   tagline:
-    "Senior Software Engineer building multi-tenant SaaS platforms and data-intensive systems. I focus on architecture, reliability, and shipping production software.",
+    "Senior Software Engineer building multi-tenant SaaS platforms and data-intensive systems.<br>I focus on architecture, reliability, and shipping production software.",
   description: "Portfolio website of Arbaaz Laskar",
   accentColor: "#1d4ed8",
   social: {

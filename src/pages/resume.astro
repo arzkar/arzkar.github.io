@@ -1,0 +1,430 @@
+---
+import { siteConfig } from "../config";
+
+// Detect if we're in PDF capture mode
+const isPdfMode = Astro.url.searchParams.get('pdf') === 'true';
+
+/* -----------------------------
+   Utils
+----------------------------- */
+
+const getSummary = (aboutMe: string): string => {
+  const cleaned = aboutMe.replace(/[🚀🔋🧠☁️]/g, "").trim();
+  const paragraphs = cleaned.split("\n\n");
+  const first = paragraphs[0] || cleaned;
+  const sentences = first
+    .split(/[.!?]+/)
+    .filter(s => s.trim().length > 0)
+    .slice(0, 3);
+  const summary = sentences.join(". ").trim();
+  return summary.endsWith(".") ? summary : summary + ".";
+};
+
+// Resume-standard duration (LinkedIn style)
+const calculateExperienceDuration = (dateRange: string): string => {
+  const monthMap: Record<string, number> = {
+    Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6,
+    Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12
+  };
+
+  const [startStr, endStr] = dateRange.split(" - ");
+  if (!startStr || !endStr) return "";
+
+  const startMatch = startStr.match(/(\w+)\s+(\d{4})/);
+  if (!startMatch) return "";
+
+  const startMonth = monthMap[startMatch[1]];
+  const startYear = parseInt(startMatch[2], 10);
+
+  let endMonth: number;
+  let endYear: number;
+
+  if (endStr.toLowerCase() === "present") {
+    const now = new Date();
+    endMonth = now.getMonth() + 1;
+    endYear = now.getFullYear();
+  } else {
+    const endMatch = endStr.match(/(\w+)\s+(\d{4})/);
+    if (!endMatch) return "";
+    endMonth = monthMap[endMatch[1]];
+    endYear = parseInt(endMatch[2], 10);
+  }
+
+  const totalMonths =
+    (endYear - startYear) * 12 + (endMonth - startMonth);
+
+  if (totalMonths <= 0) return "";
+
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
+
+  if (years === 0) return `${months} ${months === 1 ? "mo" : "mos"}`;
+  if (months === 0) return `${years} ${years === 1 ? "yr" : "yrs"}`;
+  return `${years} ${years === 1 ? "yr" : "yrs"} ${months} ${months === 1 ? "mo" : "mos"}`;
+};
+
+const groupSkills = (skills: string[]) => {
+  const categories: Record<string, string[]> = {
+    Languages: [],
+    Frameworks: [],
+    Databases: [],
+    "Tools & Cloud": [],
+  };
+
+  const map = {
+    Languages: ["Python", "JavaScript", "TypeScript", "Go", "Java", "C++", "Rust", "HTML5", "CSS3"],
+    Frameworks: ["ReactJS", "Next.js", "NodeJS", "Express", "NestJS", "Fastify", "Hono", "TanStack Query"],
+    Databases: ["PostgreSQL", "MySQL", "MongoDB", "SQLite"],
+    "Tools & Cloud": ["AWS", "GCP", "RabbitMQ"]
+  };
+
+  skills.forEach(skill => {
+    for (const key in map) {
+      if (map[key as keyof typeof map].includes(skill)) {
+        categories[key].push(skill);
+        return;
+      }
+    }
+    categories["Tools & Cloud"].push(skill);
+  });
+
+  return categories;
+};
+
+const summary = getSummary(siteConfig.aboutMe);
+const skillGroups = groupSkills(siteConfig.skills);
+const portfolioUrl = "https://arzkar.github.io";
+---
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Resume — {siteConfig.name}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style define:vars={{ accentColor: siteConfig.accentColor }}>
+    :root {
+      --text-primary: #000;
+      --text-secondary: #333;
+      --text-muted: #555;
+      --accent: var(--accentColor);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Calibri, "Times New Roman", sans-serif;
+      background: #f3f4f6; /* subtle screen contrast */
+      color: var(--text-primary);
+    }
+
+    /* ---------- SCREEN WRAPPER (THIS FIXES ALIGNMENT) ---------- */
+    .screen-wrapper {
+      display: flex;
+      justify-content: center;
+      padding: 24px;
+      overflow-x: auto;
+    }
+
+    /* ---------- PAGE ---------- */
+    #resume-content {
+      width: 8.5in;
+      padding: 0.75in;
+      background: #fff;
+    }
+
+    /* Scale page on smaller screens */
+    @media screen {
+      #resume-content {
+        transform-origin: top center;
+        transform: scale(0.9);
+      }
+    }
+
+    @media (max-width: 900px) {
+      #resume-content {
+        transform: scale(0.8);
+      }
+    }
+
+    @media (max-width: 700px) {
+      #resume-content {
+        transform: scale(0.7);
+      }
+    }
+
+    /* PDF capture mode - apply print styles */
+    body.pdf-mode {
+      background: #fff;
+      margin: 0;
+    }
+
+    body.pdf-mode .screen-wrapper {
+      padding: 0;
+    }
+
+    body.pdf-mode #resume-content {
+      transform: none !important;
+      padding: 0.5in;
+    }
+
+    /* ---------- DOWNLOAD BUTTON ---------- */
+    .download-button {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      transition: all 0.2s;
+      z-index: 1000;
+    }
+
+    .download-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .download-button:active {
+      transform: translateY(0);
+    }
+
+    @media print {
+      .download-button {
+        display: none;
+      }
+    }
+
+    body.pdf-mode .download-button {
+      display: none;
+    }
+
+    /* ---------- HEADER ---------- */
+    .resume-header {
+      margin-bottom: 20pt;
+      border-bottom: 2pt solid var(--accent);
+      padding-bottom: 10pt;
+    }
+
+    .resume-name {
+      font-size: 20pt;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .resume-title {
+      font-size: 11pt;
+      margin-top: 4pt;
+    }
+
+    .resume-contact {
+      font-size: 9pt;
+      margin-top: 6pt;
+    }
+
+    .resume-contact a {
+      color: #000;
+      text-decoration: none;
+    }
+
+    /* ---------- SECTIONS ---------- */
+    .resume-section {
+      margin-bottom: 16pt;
+    }
+
+    .section-title {
+      font-size: 12pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      border-bottom: 1pt solid #000;
+      margin-bottom: 8pt;
+      padding-bottom: 2pt;
+    }
+
+    .summary-text {
+      font-size: 11pt;
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    /* ---------- EXPERIENCE ---------- */
+    .experience-item {
+      margin-bottom: 12pt;
+    }
+
+    .experience-header {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .experience-company {
+      font-weight: bold;
+      font-size: 11pt;
+    }
+
+    .experience-title {
+      font-size: 10pt;
+      color: var(--text-secondary);
+    }
+
+    .experience-date {
+      font-size: 10pt;
+      color: var(--text-secondary);
+      text-align: right;
+    }
+
+    .experience-duration {
+      font-size: 9pt;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    .experience-bullets {
+      margin-left: 16pt;
+      margin-top: 4pt;
+      list-style: none;
+    }
+
+    .experience-bullets li {
+      font-size: 10pt;
+      margin-bottom: 3pt;
+      position: relative;
+      padding-left: 10pt;
+    }
+
+    .experience-bullets li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+    }
+
+    /* ---------- SKILLS ---------- */
+    .skills-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12pt;
+    }
+
+    .skill-category {
+      flex: 1;
+      min-width: 150pt;
+    }
+
+    .skill-category-title {
+      font-weight: bold;
+      font-size: 10pt;
+    }
+
+    .skill-list {
+      font-size: 10pt;
+    }
+
+    /* ---------- PRINT ---------- */
+    @media print {
+      body {
+        background: #fff;
+        margin: 0;
+      }
+
+      .screen-wrapper {
+        padding: 0;
+      }
+
+      #resume-content {
+        transform: none;
+        padding: 0.5in;
+      }
+
+      @page {
+        size: letter;
+        margin: 0;
+      }
+    }
+  </style>
+  {isPdfMode && (
+    <script is:inline>
+      document.body.classList.add('pdf-mode');
+    </script>
+  )}
+</head>
+
+<body>
+  <button class="download-button" id="resume-download-btn" onclick="handleResumeDownload()">
+    Download PDF
+  </button>
+  <div class="screen-wrapper">
+    <div id="resume-content">
+      <!-- Header -->
+      <div class="resume-header">
+        <div class="resume-name">{siteConfig.name}</div>
+        <div class="resume-title">{siteConfig.title}</div>
+        <div class="resume-contact">
+          <a href={`mailto:${siteConfig.social.email}`}>{siteConfig.social.email}</a> |
+          <a href={portfolioUrl}>Portfolio</a> |
+          <a href={siteConfig.social.linkedin}>LinkedIn</a> |
+          <a href={siteConfig.social.github}>GitHub</a>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="resume-section">
+        <div class="section-title">Professional Summary</div>
+        <div class="summary-text">{summary}</div>
+      </div>
+
+      <!-- Experience -->
+      <div class="resume-section">
+        <div class="section-title">Experience</div>
+        {siteConfig.experience.map(exp => (
+          <div class="experience-item">
+            <div class="experience-header">
+              <div>
+                <div class="experience-company">{exp.company}</div>
+                <div class="experience-title">{exp.title}</div>
+              </div>
+              <div>
+                <div class="experience-date">{exp.dateRange}</div>
+                <div class="experience-duration">
+                  {calculateExperienceDuration(exp.dateRange)}
+                </div>
+              </div>
+            </div>
+            <ul class="experience-bullets">
+              {exp.bullets.map(b => <li>{b}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+
+      <!-- Skills -->
+      <div class="resume-section">
+        <div class="section-title">Skills</div>
+        <div class="skills-container">
+          {Object.entries(skillGroups).map(([cat, skills]) => (
+            <div class="skill-category">
+              <div class="skill-category-title">{cat}</div>
+              <div class="skill-list">{skills.join(", ")}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+  <script is:inline>
+    function handleResumeDownload() {
+      // Open print dialog for PDF download
+      window.print();
+    }
+  </script>
+</body>
+</html>
