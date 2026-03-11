@@ -171,14 +171,14 @@ import { siteConfig } from "../config";
     </div>
   </div>
   <div
-    class="absolute bottom-0 left-0 right-0 p-8 sm:p-12 md:p-24 flex gap-x-4 sm:gap-x-6 md:gap-x-8 text-gray-700"
+    class="absolute bottom-0 left-0 right-0 p-8 sm:p-12 md:p-24 flex gap-x-4 sm:gap-x-6 md:gap-x-8 text-gray-700 pointer-events-none"
   >
     {
       siteConfig.social?.email && (
         <a
           href={`mailto:${siteConfig.social.email}`}
           aria-label="Email"
-          class="transition-colors duration-300 hover:text-[var(--accent-color)]"
+          class="transition-colors duration-300 hover:text-[var(--accent-color)] pointer-events-auto"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -206,7 +206,7 @@ import { siteConfig } from "../config";
           target="_blank"
           rel="noopener noreferrer"
           aria-label="LinkedIn"
-          class="transition-colors duration-300 hover:text-[var(--accent-color)]"
+          class="transition-colors duration-300 hover:text-[var(--accent-color)] pointer-events-auto"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -239,7 +239,7 @@ import { siteConfig } from "../config";
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Twitter"
-          class="transition-colors duration-300 hover:text-[var(--accent-color)]"
+          class="transition-colors duration-300 hover:text-[var(--accent-color)] pointer-events-auto"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -269,7 +269,7 @@ import { siteConfig } from "../config";
           target="_blank"
           rel="noopener noreferrer"
           aria-label="GitHub"
-          class="transition-colors duration-300 hover:text-[var(--accent-color)]"
+          class="transition-colors duration-300 hover:text-[var(--accent-color)] pointer-events-auto"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
