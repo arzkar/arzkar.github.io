@@ -33,12 +33,12 @@ const hasCaseStudies = siteConfig.caseStudies && siteConfig.caseStudies.length >
                       style={`border-color: ${siteConfig.accentColor}; background-color: ${siteConfig.accentColor}`}
                     />
 
-                  <div class="bg-white rounded-lg border border-gray-200 p-6 sm:p-8 md:p-10">
-                    {/* Header */}
-                    <div class="mb-8">
-                      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
-                        <div>
-                          <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                  <details class="group bg-white rounded-xl border border-gray-200 [&_summary::-webkit-details-marker]:hidden open:shadow-xl transition-all duration-300">
+                    <summary class="cursor-pointer list-none focus:outline-none p-6 sm:p-8 md:p-10 hover:bg-gray-50 transition-colors">
+                      {/* Header */}
+                      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                        <div class="flex-1 pr-4">
+                          <h3 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors">
                             {study.title}
                           </h3>
                           {study.companyUrl ? (
@@ -46,8 +46,9 @@ const hasCaseStudies = siteConfig.caseStudies && siteConfig.caseStudies.length >
                               href={study.companyUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              class="text-lg sm:text-xl hover:underline transition-colors"
+                              class="text-lg sm:text-xl hover:underline transition-colors relative z-10 inline-block"
                               style={`color: ${siteConfig.accentColor}`}
+                              onclick="event.stopPropagation()"
                             >
                               {study.company}
                             </a>
@@ -60,72 +61,97 @@ const hasCaseStudies = siteConfig.caseStudies && siteConfig.caseStudies.length >
                             </p>
                           )}
                         </div>
-                        <span class="text-sm text-gray-500 font-mono">
-                          {study.dateRange}
-                        </span>
+                        <div class="flex items-center gap-4 sm:flex-col sm:items-end sm:gap-2">
+                          <span class="text-sm text-gray-500 font-mono">
+                            {study.dateRange}
+                          </span>
+                          <span class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-500 shadow-sm group-hover:bg-gray-100 transition-all transform group-open:rotate-180 flex-shrink-0">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </span>
+                        </div>
                       </div>
 
                       {study.isPrivate && (
-                        <p class="text-sm text-gray-500 italic">
+                        <p class="text-sm text-gray-500 italic mt-4">
                           Codebase is private due to client confidentiality. Architecture and decisions shown reflect the production system.
                         </p>
                       )}
-                    </div>
 
-                    {/* Problem */}
-                    <div class="mb-8">
-                      <h4 class="text-lg font-semibold text-gray-900 mb-3">Problem</h4>
-                      <div class="text-base text-gray-700 leading-relaxed space-y-4">
-                        {study.problem.split("\n\n").map((paragraph) => (
-                          <p>{paragraph}</p>
-                        ))}
+                      {/* Content Peek */}
+                      <div class="mt-6 relative group-open:hidden">
+                        <div class="text-base text-gray-600 leading-relaxed line-clamp-2 sm:line-clamp-3">
+                          <span class="font-semibold text-gray-800 mr-2">The Challenge:</span>
+                          {study.problem.split("\n\n")[0]}
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 h-10 bg-gradient-to-t from-white group-hover:from-gray-50 to-transparent pointer-events-none"></div>
                       </div>
-                    </div>
-
-                    {/* Architecture */}
-                    <div class="mb-8">
-                      <h4 class="text-lg font-semibold text-gray-900 mb-3">Architecture</h4>
-                      <div class="text-base text-gray-700 leading-relaxed space-y-4">
-                        {study.architecture.split("\n\n").map((paragraph) => (
-                          <p>{paragraph}</p>
-                        ))}
+                      
+                      <div class="mt-4 text-sm font-medium group-open:hidden flex items-center gap-1" style={`color: ${siteConfig.accentColor}`}>
+                        Read full case study 
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
                       </div>
-                    </div>
+                    </summary>
 
-                    {/* Key Decisions */}
-                    <div class="mb-8">
-                      <h4 class="text-lg font-semibold text-gray-900 mb-3">Key Decisions</h4>
-                      <ul class="space-y-2">
-                        {study.decisions.map((decision) => (
-                          <li class="flex items-start">
-                            <span class="inline-block w-1.5 h-1.5 rounded-full bg-gray-400 mt-2 mr-3 flex-shrink-0" />
-                            <span class="text-base text-gray-700 leading-relaxed">
-                              {decision}
+                    <div class="px-6 sm:px-8 md:px-10 pb-6 sm:pb-8 md:pb-10 pt-4 sm:pt-6 border-t border-gray-100 animate-in fade-in duration-300">
+                      {/* Problem */}
+                      <div class="mb-8">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-3">Problem</h4>
+                        <div class="text-base text-gray-700 leading-relaxed space-y-4">
+                          {study.problem.split("\n\n").map((paragraph) => (
+                            <p>{paragraph}</p>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Architecture */}
+                      <div class="mb-8">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-3">Architecture</h4>
+                        <div class="text-base text-gray-700 leading-relaxed space-y-4">
+                          {study.architecture.split("\n\n").map((paragraph) => (
+                            <p>{paragraph}</p>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Key Decisions */}
+                      <div class="mb-8">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-3">Key Decisions</h4>
+                        <ul class="space-y-2">
+                          {study.decisions.map((decision) => (
+                            <li class="flex items-start">
+                              <span class="inline-block w-1.5 h-1.5 rounded-full bg-gray-400 mt-2 mr-3 flex-shrink-0" />
+                              <span class="text-base text-gray-700 leading-relaxed">
+                                {decision}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Outcome */}
+                      <div class="mb-6">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-3">Outcome</h4>
+                        <p class="text-base text-gray-700 leading-relaxed">
+                          {study.outcome}
+                        </p>
+                      </div>
+
+                      {/* Technologies */}
+                      <div>
+                        <div class="flex flex-wrap gap-2">
+                          {study.technologies.map((tech) => (
+                            <span class="px-3 py-1 bg-gray-100 text-gray-800 rounded-md text-sm font-medium">
+                              {tech}
                             </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Outcome */}
-                    <div class="mb-6">
-                      <h4 class="text-lg font-semibold text-gray-900 mb-3">Outcome</h4>
-                      <p class="text-base text-gray-700 leading-relaxed">
-                        {study.outcome}
-                      </p>
-                    </div>
-
-                    {/* Technologies */}
-                    <div>
-                      <div class="flex flex-wrap gap-2">
-                        {study.technologies.map((tech) => (
-                          <span class="px-3 py-1 bg-gray-100 text-gray-800 rounded-md text-sm font-medium">
-                            {tech}
-                          </span>
-                        ))}
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </details>
                   </article>
                 ))}
               </div>
