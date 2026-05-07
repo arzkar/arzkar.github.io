@@ -3,7 +3,7 @@
  */
 export const about = {
   aboutMe:
-    "Full-stack engineer with experience building and scaling production-grade systems across SaaS platforms, real-time data pipelines, and cloud infrastructure. I've worked end-to-end — from system architecture and backend services to frontend performance and deployment pipelines.\n\nI design and build systems that handle scale, complexity, and business-critical operations. This includes multi-tenant SaaS platforms, IoT data pipelines processing high-frequency telemetry, and complex business systems for payments, scheduling, and operational workflows.\n\nMy approach emphasizes architecture decisions, tradeoffs, and reliability. I work with modern Node.js frameworks (NestJS, Fastify, Hono), React with TanStack Query, and cloud infrastructure on AWS and GCP, implementing CI/CD and infrastructure-as-code practices.",
+    "Full-stack software engineer with a track record of architecting and scaling high-performance systems—from multi-tenant SaaS platforms to real-time IoT data pipelines.\n\nI specialize in leading engineering teams and building systems that handle massive scale and business-critical operations. My recent work includes processing over 14 million daily IoT telemetry events, architecting custom billing engines handling $10M+ in monthly volume, and optimizing complex database architectures in PostgreSQL.\n\nMy approach is driven by architectural pragmatism, strong domain modeling, and operational reliability. I build primarily with modern Node.js frameworks (NestJS, Fastify, Hono) and React (TanStack Query), backed by robust AWS infrastructure, CI/CD, and strict infrastructure-as-code practices.",
   skills: [
     "Python",
     "JavaScript",
