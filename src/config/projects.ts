@@ -31,13 +31,6 @@ export const projects = {
       skills: ["Python", "FastAPI", "React", "TypeScript"],
     },
     {
-      name: "git-utils",
-      description:
-        "A CLI for performing various bulk operations on git repositories. Streamlines common git workflows for developers working with multiple repositories.",
-      link: "https://github.com/arzkar/git-utils",
-      skills: ["Python", "Go", "Node.js"],
-    },
-    {
       name: "adb-sync",
       description:
         "A CLI to sync between android & local system using adb. Simplifies file synchronization for Android developers and automation workflows.",
