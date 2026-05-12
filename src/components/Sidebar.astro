@@ -4,12 +4,14 @@ import { siteConfig } from "../config";
 const hasProjects = siteConfig.projects?.items?.length > 0;
 const hasCaseStudies = siteConfig.caseStudies?.length > 0;
 const hasExperience = siteConfig.experience?.length > 0;
-
 ---
 
 <aside
   id="sidebar"
-  class="hidden lg:flex flex-col w-[38%] min-w-[300px] max-w-[460px] h-screen sticky top-0 overflow-y-auto border-r border-gray-100 px-10 py-12 flex-shrink-0 scrollbar-hide"
+  class="flex flex-col w-full px-6 py-10 border-b border-gray-100
+         lg:w-[38%] lg:min-w-[300px] lg:max-w-[460px] lg:h-screen lg:sticky lg:top-0
+         lg:overflow-y-auto lg:border-r lg:border-b-0 lg:px-10 lg:py-12
+         lg:flex-shrink-0 scrollbar-hide"
 >
   <!-- Identity -->
   <div>
@@ -82,37 +84,40 @@ const hasExperience = siteConfig.experience?.length > 0;
   </div>
 
   <!-- Navigation -->
-  <nav class="mt-12 flex flex-col gap-0.5" aria-label="Page sections">
-    <p class="mb-3 text-[10px] font-mono text-gray-300 uppercase tracking-[0.2em]">Navigate</p>
+  <!-- Mobile: horizontal row of links; Desktop: vertical list with bar indicator -->
+  <nav
+    class="mt-8 pt-6 border-t border-gray-100 flex flex-row flex-wrap gap-x-5 gap-y-1.5
+           lg:mt-12 lg:pt-0 lg:border-t-0 lg:flex-col lg:gap-0.5"
+    aria-label="Page sections"
+  >
+    <p class="hidden lg:block mb-3 text-[10px] font-mono text-gray-300 uppercase tracking-[0.2em] w-full">Navigate</p>
     <a href="#about" class="nav-link flex items-center gap-3 py-1.5 text-[13px] text-gray-500 hover:text-gray-900 transition-colors duration-150">
-      <span class="nav-bar w-[3px] h-4 rounded-full bg-gray-200 transition-all duration-200"></span>
+      <span class="nav-bar hidden lg:block w-[3px] h-4 rounded-full bg-gray-200 transition-all duration-200"></span>
       About
     </a>
     {hasCaseStudies && (
       <a href="#case-studies" class="nav-link flex items-center gap-3 py-1.5 text-[13px] text-gray-500 hover:text-gray-900 transition-colors duration-150">
-        <span class="nav-bar w-[3px] h-4 rounded-full bg-gray-200 transition-all duration-200"></span>
+        <span class="nav-bar hidden lg:block w-[3px] h-4 rounded-full bg-gray-200 transition-all duration-200"></span>
         Work
       </a>
     )}
     {hasExperience && (
       <a href="#experience" class="nav-link flex items-center gap-3 py-1.5 text-[13px] text-gray-500 hover:text-gray-900 transition-colors duration-150">
-        <span class="nav-bar w-[3px] h-4 rounded-full bg-gray-200 transition-all duration-200"></span>
+        <span class="nav-bar hidden lg:block w-[3px] h-4 rounded-full bg-gray-200 transition-all duration-200"></span>
         Experience
       </a>
     )}
     {hasProjects && (
       <a href="#projects" class="nav-link flex items-center gap-3 py-1.5 text-[13px] text-gray-500 hover:text-gray-900 transition-colors duration-150">
-        <span class="nav-bar w-[3px] h-4 rounded-full bg-gray-200 transition-all duration-200"></span>
+        <span class="nav-bar hidden lg:block w-[3px] h-4 rounded-full bg-gray-200 transition-all duration-200"></span>
         Open-source
       </a>
     )}
   </nav>
 
-  <!-- Spacer -->
-  <div class="flex-1 min-h-8"></div>
-
-  <!-- Copyright -->
-  <p class="text-[10px] font-mono text-gray-300">© {new Date().getFullYear()} {siteConfig.name}</p>
+  <!-- Desktop-only spacer + copyright -->
+  <div class="hidden lg:flex lg:flex-1 min-h-8"></div>
+  <p class="hidden lg:block text-[10px] font-mono text-gray-300">© {new Date().getFullYear()} {siteConfig.name}</p>
 </aside>
 
 <style>
