@@ -1,6 +1,5 @@
 ---
-import Header from "../components/Header.astro";
-import Hero from "../components/Hero.astro";
+import Sidebar from "../components/Sidebar.astro";
 import About from "../components/About.astro";
 import CaseStudies from "../components/CaseStudies.astro";
 import Experience from "../components/Experience.astro";
@@ -14,7 +13,7 @@ import "../styles/global.css";
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={siteConfig.description} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,17 +22,131 @@ import "../styles/global.css";
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
       rel="stylesheet"
     />
-    <title>{siteConfig.name} - {siteConfig.title}</title>
+    <title>{siteConfig.name} — {siteConfig.title}</title>
   </head>
-  <body>
-    <Header />
-    <section>
-      <Hero />
-      <About />
-      <Experience />
-      <CaseStudies />
-      <Projects />
-    </section>
-    <Footer />
+  <body style={`--accent-color: ${siteConfig.accentColor}`}>
+
+    <!-- Mobile header (hidden on lg+) -->
+    <header class="lg:hidden fixed top-0 inset-x-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100 px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-base font-bold text-gray-900">{siteConfig.name}</p>
+          <p class="text-[10px] text-gray-400 uppercase tracking-widest font-mono">{siteConfig.title}</p>
+        </div>
+        <a
+          href="/resume"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-[11px] font-medium px-3 py-1.5 rounded border transition-colors"
+          style={`border-color: ${siteConfig.accentColor}; color: ${siteConfig.accentColor};`}
+        >
+          Resume ↗
+        </a>
+      </div>
+      <div class="flex items-center gap-6 mt-3 overflow-x-auto scrollbar-hide pb-0.5">
+        <a href="#about" class="mobile-nav text-xs text-gray-500 hover:text-gray-900 whitespace-nowrap transition-colors">About</a>
+        {siteConfig.caseStudies?.length > 0 && (
+          <a href="#case-studies" class="mobile-nav text-xs text-gray-500 hover:text-gray-900 whitespace-nowrap transition-colors">Work</a>
+        )}
+        {siteConfig.experience?.length > 0 && (
+          <a href="#experience" class="mobile-nav text-xs text-gray-500 hover:text-gray-900 whitespace-nowrap transition-colors">Experience</a>
+        )}
+        {siteConfig.projects?.items?.length > 0 && (
+          <a href="#projects" class="mobile-nav text-xs text-gray-500 hover:text-gray-900 whitespace-nowrap transition-colors">Open-source</a>
+        )}
+      </div>
+    </header>
+
+    <!-- Main layout -->
+    <div class="lg:flex lg:h-screen lg:overflow-hidden">
+      <Sidebar />
+      <main id="main-scroll" class="lg:flex-1 lg:h-screen lg:overflow-y-auto pt-28 lg:pt-0">
+        <About />
+        <Experience />
+        <CaseStudies />
+        <Projects />
+        <Footer />
+      </main>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const mainScroll = document.getElementById('main-scroll') as HTMLElement | null;
+        const navLinks = document.querySelectorAll<HTMLAnchorElement>('.nav-link, .mobile-nav');
+        const sections = document.querySelectorAll<HTMLElement>('section[id]');
+
+        // Smooth scroll all internal anchors to the right container
+        navLinks.forEach(link => {
+          link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            if (!href?.startsWith('#')) return;
+            e.preventDefault();
+            const id = href.slice(1);
+            const target = document.getElementById(id);
+            if (!target) return;
+            if (mainScroll) {
+              const containerRect = mainScroll.getBoundingClientRect();
+              const targetRect = target.getBoundingClientRect();
+              const scrollTop = mainScroll.scrollTop + (targetRect.top - containerRect.top) - 32;
+              mainScroll.scrollTo({ top: scrollTop, behavior: 'smooth' });
+            } else {
+              target.scrollIntoView({ behavior: 'smooth' });
+            }
+          });
+        });
+
+        // Active section tracking via scroll position
+        const getOffsetFromContainer = (el: HTMLElement): number => {
+          let top = 0;
+          let node: HTMLElement | null = el;
+          while (node && node !== mainScroll) {
+            top += node.offsetTop;
+            node = node.offsetParent as HTMLElement | null;
+          }
+          return top;
+        };
+
+        let sectionOffsets: { id: string; top: number }[] = [];
+        const buildOffsets = () => {
+          sectionOffsets = Array.from(sections).map(s => ({
+            id: s.id,
+            top: getOffsetFromContainer(s),
+          }));
+        };
+
+        buildOffsets();
+        window.addEventListener('resize', buildOffsets);
+
+        const updateActive = (scrollTop: number) => {
+          let activeId = sectionOffsets[0]?.id ?? '';
+          for (const { id, top } of sectionOffsets) {
+            if (scrollTop + 80 >= top) activeId = id;
+          }
+          navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + activeId);
+          });
+        };
+
+        if (mainScroll) {
+          mainScroll.addEventListener('scroll', () => updateActive(mainScroll.scrollTop), { passive: true });
+          updateActive(mainScroll.scrollTop);
+        }
+
+        // Reveal animations
+        const reveals = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                revealObserver.unobserve(entry.target);
+              }
+            });
+          },
+          { root: mainScroll, threshold: 0.05 }
+        );
+        reveals.forEach(el => revealObserver.observe(el));
+      });
+    </script>
   </body>
 </html>
