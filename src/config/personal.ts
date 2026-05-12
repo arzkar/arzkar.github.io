@@ -5,7 +5,7 @@ export const personal = {
   name: "Arbaaz Laskar",
   title: "Senior Software Developer",
   tagline:
-    'Senior Software Engineer architecting high-performance SaaS platforms and data-intensive systems at scale.<br>I focus on robust system design, operational reliability, and leading teams to ship business-critical software.<br><br>Working on <a href="https://heimdall-puce.vercel.app/" target="_blank" class="underline decoration-gray-400 decoration-2 underline-offset-4 hover:text-[var(--accent-color)] hover:decoration-[var(--accent-color)] transition-colors">Heimdall</a>, a real-time global intelligence dashboard.',
+    'Senior Software Engineer architecting high-performance SaaS platforms and data-intensive systems at scale.<br>I focus on robust system design, operational reliability, and leading teams to ship business-critical software.<br><br>Working on <a href="https://github.com/arzkar/Veritas" target="_blank" class="underline decoration-gray-400 decoration-2 underline-offset-4 hover:text-[var(--accent-color)] hover:decoration-[var(--accent-color)] transition-colors">Veritas</a>, an autonomous multi-agent AI system for adversarial due diligence on startup pitch decks.',
   description: "Portfolio website of Arbaaz Laskar",
   accentColor: "#1d4ed8",
   social: {

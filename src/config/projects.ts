@@ -8,6 +8,13 @@ export const projects = {
     "Outside of client work, I build developer tools, CLIs, and automation utilities — often to scratch real workflow problems.",
   items: [
     {
+      name: "Veritas",
+      description:
+        "A local-first, multi-agent AI system for adversarial due diligence on startup pitch decks. Dispatches specialized agents to extract zero-trust claims, find contradicting evidence, detect suspicious absence of proof, and propagate credibility scores through a Bayesian engine.",
+      link: "https://github.com/arzkar/Veritas",
+      skills: ["Python", "FastAPI", "LangGraph", "Next.js", "Ollama", "FAISS"],
+    },
+    {
       name: "Heimdall",
       description:
         "A real-time global intelligence dashboard aggregating and visualizing disparate data streams for geopolitical, financial, and technological insights.",
