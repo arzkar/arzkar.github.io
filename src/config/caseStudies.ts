@@ -81,25 +81,29 @@ export const caseStudies: CaseStudy[] = [
     companyUrl: "https://www.pointo.in/",
     dateRange: "Jun 2024 – Jul 2025",
     problem:
-      "Pointo operates large fleets of lithium-ion batteries powering e-rickshaws. Each battery continuously emits telemetry via a Battery Management System (BMS), producing high-frequency heartbeat data that must be ingested, processed, and analyzed in near real time.\n\nThe system needed to handle 5,000+ active batteries concurrently, with each device emitting a message every 30 seconds. This generated over 14.4 million heartbeat messages daily. We needed to support multiple IoT device manufacturers, enable real-time monitoring, and remain reliable under intermittent connectivity.",
+      "Pointo operates large fleets of lithium-ion batteries powering e-rickshaws. Each battery continuously emits telemetry through IoT BMS devices, generating high-frequency heartbeat packets that needed to be ingested, parsed, processed, and analyzed in near real time.\n\nThe platform needed to support 5,000+ active batteries concurrently, with devices transmitting telemetry every 30 seconds, resulting in over 14.4 million daily events. The system also had to support multiple IoT manufacturers, unreliable network conditions, CAN telemetry decoding, and real-time operational visibility across the fleet.",
     architecture:
-      "The platform was designed as a stream-oriented IoT ingestion and processing pipeline, optimized for reliability and extreme data velocity.\n\nEdge & ingestion layer: IoT devices communicate via TCP. Custom parsers were implemented for each device type to normalize vendor-specific payloads.\n\nProcessing pipeline & Messaging: RabbitMQ buffers and fans-out the massive influx of heartbeat events, smoothing traffic spikes and decoupling ingestion from processing.\n\nCore backend: A NestJS service handles business logic, persistence, and APIs, computing battery health and alerting thresholds.\n\nData storage: We engineered PostgreSQL to handle the massive data ingestion, implementing advanced indexing and optimization strategies to ensure complex search queries remained performant despite the rapidly growing dataset.\n\nInfrastructure: Deployed on AWS using EC2, RDS, ECR, S3, and SES, with robust CI/CD pipelines.",
+      "The system was designed as a stream-oriented telemetry ingestion and processing platform optimized for reliability, scalability, and operational observability.\n\nEdge & ingestion layer: IoT devices communicated over raw TCP connections. We implemented custom binary protocol parsers for multiple device vendors, including Teltonika Codec8/Codec12 payload decoding and CAN telemetry parsing.\n\nProcessing & messaging: RabbitMQ buffered and distributed telemetry events across downstream processing services, smoothing traffic spikes and decoupling ingestion from business workflows.\n\nCore backend: NestJS services handled telemetry persistence, battery state computation, alerting, fleet APIs, and operational workflows.\n\nData layer: PostgreSQL was heavily optimized for high-ingestion telemetry workloads using indexing, partitioning strategies, and query optimization techniques to maintain sub-second dashboard and analytics performance.\n\nInfrastructure: Deployed on AWS using EC2, RDS, ECR, S3, and SES with CI/CD pipelines and operational monitoring.",
     decisions: [
-      "Optimized PostgreSQL over pure TSDB: While time-series databases are common, we heavily optimized PostgreSQL to handle the millions of daily telemetry rows, allowing us to maintain relational integrity with our operational data while scaling search and aggregation queries.",
-      "Raw payloads to S3 before processing: Storing raw telemetry upfront allowed safe parser iteration, replay of historical data, and protection against malformed payloads.",
-      "RabbitMQ over Kafka: For the required throughput, RabbitMQ easily handled the massive volume with significantly lower operational overhead for our team size.",
-      "Custom device parsers: Each manufacturer exposes different protocols. Writing explicit parsers kept complexity isolated and prevented vendor quirks from leaking into core logic.",
+      "Optimized PostgreSQL over dedicated TSDBs to maintain strong relational consistency between telemetry, operational workflows, and fleet data while still supporting large-scale time-series ingestion.",
+      "Stored raw telemetry payloads in S3 before processing, enabling safe parser iteration, historical replay, debugging, and recovery from malformed packets.",
+      "Used RabbitMQ instead of Kafka to efficiently handle the required throughput with significantly lower operational overhead for a smaller engineering team.",
+      "Implemented vendor-specific protocol parsers and CAN decoding pipelines to isolate manufacturer quirks and prevent device-specific complexity from leaking into core services.",
     ],
     outcome:
-      "Successfully ingests and processes over 14.4 million telemetry events daily from a fleet of 5,000+ batteries. Enables real-time monitoring and early fault detection, dramatically improving fleet uptime and operational decision-making. The PostgreSQL database scales smoothly with the massive data volume, maintaining sub-second query performance for critical dashboards.",
+      "Successfully ingested and processed over 14.4 million telemetry events daily from a fleet of 5,000+ batteries while maintaining reliable real-time monitoring and fault detection. The platform significantly improved operational visibility, reduced manual intervention, and maintained sub-second query performance across critical dashboards and fleet analytics workflows.",
     isPrivate: true,
     technologies: [
       "NestJS",
       "Next.js",
+      "PostgreSQL",
       "RabbitMQ",
       "AWS (EC2, RDS, ECR, S3, SES)",
       "TCP",
-      "Time-series Storage",
+      "CAN Bus",
+      "Teltonika Codec8/Codec12",
+      "IoT Telemetry",
+      "Distributed Systems",
     ],
   },
   {

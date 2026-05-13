@@ -19,10 +19,11 @@ export const experience = [
     title: "SDE 2",
     dateRange: "Jun 2024 - Jul 2025",
     bullets: [
-      "Grew and led a 5-person engineering team, driving the development of full-stack operational solutions (Next.js, Nest.js) that optimized org-wide KYC onboarding, collections, and inventory management",
-      "Built a highly scalable IoT data platform managing a fleet of 5,000+ lithium-ion batteries, processing over 14 million daily heartbeat messages via RabbitMQ",
-      "Architected the database layer in PostgreSQL to handle massive data ingestion and optimized complex search queries for real-time battery monitoring",
-      "Managed comprehensive AWS infrastructure (EC2, RDS, S3) and established CI/CD pipelines to ensure deployment reliability",
+      "Built and led a 5-person engineering team delivering operational platforms for KYC onboarding, collections, inventory management, and battery lifecycle workflows using Next.js and NestJS",
+      "Engineered a large-scale IoT telemetry platform managing 5,000+ lithium-ion batteries and processing over 14 million daily heartbeat events through RabbitMQ-based ingestion pipelines",
+      "Implemented CAN telemetry decoding and developed vendor-specific binary protocol parsers for Teltonika Codec8/Codec12 devices, enabling real-time telematics ingestion and fleet monitoring",
+      "Architected and optimized PostgreSQL pipelines for high-volume telemetry ingestion, maintaining sub-second query performance for operational dashboards, battery analytics, and search workflows",
+      "Managed AWS infrastructure across EC2, RDS, and S3 while building CI/CD pipelines, deployment workflows, and scalable backend services focused on operational reliability",
     ],
   },
   {

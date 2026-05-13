@@ -3,9 +3,9 @@
  */
 export const personal = {
   name: "Arbaaz Laskar",
-  title: "Senior Software Developer",
+  title: "Backend / Platform Engineer",
   tagline:
-    'Senior Software Engineer architecting high-performance SaaS platforms and data-intensive systems at scale.<br>I focus on robust system design, operational reliability, and leading teams to ship business-critical software.<br><br>Working on <a href="https://github.com/arzkar/Veritas" target="_blank" class="underline decoration-gray-400 decoration-2 underline-offset-4 hover:text-[var(--accent-color)] hover:decoration-[var(--accent-color)] transition-colors">Veritas</a>, an autonomous multi-agent AI system for adversarial due diligence on startup pitch decks.',
+    'Backend and platform engineer focused on distributed systems, IoT telemetry, operational tooling, and high-scale SaaS infrastructure.<br>I build reliable systems that power real-world operations — from telemetry pipelines processing 14M+ daily events to payment platforms handling $10M+ monthly transaction volume.<br><br>Currently building <a href="https://github.com/arzkar/Veritas" target="_blank" class="underline decoration-gray-400 decoration-2 underline-offset-4 hover:text-[var(--accent-color)] hover:decoration-[var(--accent-color)] transition-colors">Veritas</a>, a multi-agent AI system for adversarial due diligence on startup pitch decks.',
   description: "Portfolio website of Arbaaz Laskar",
   accentColor: "#1d4ed8",
   social: {
